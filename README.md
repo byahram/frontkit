@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontkit
 
-## Getting Started
+Next.js app with the shadcn/ui documentation site migrated into the project root.
+The documentation home page is served at `/`; old `/docs/...` links redirect to their new paths.
 
-First, run the development server:
+## Development
 
-```bash
+```sh
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000. The MDX index is generated automatically during
+installation. Component styles are included; regenerate them after changing the
+registry with `npm run registry:build`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where to edit
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `app/(app)/(docs)`: documentation routes and layouts.
+- `content/docs`: MDX pages and navigation metadata, following the upstream structure.
+- `components`: navigation, search, code previews, and shared documentation UI.
+- `registry`, `examples`, `styles`: component demos and their source/style variants.
+- `app/(view)`: iframe preview routes used by documentation examples.
+- `lib/config.ts`: site name, URL, and navigation.
 
-## Learn More
+Set `NEXT_PUBLIC_SITE_URL` to the deployed origin before publishing.
+Upstream documentation content and external links are retained as starter content;
+replace them with your own documentation as needed. Upstream marketing pages are
+not exposed. Designer/type specimen modules retained under `app/(app)` support
+embedded previews.
 
-To learn more about Next.js, take a look at the following resources:
+## Checks
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```sh
+npm run typecheck
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Attribution
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and
+[LICENSE.shadcn.md](LICENSE.shadcn.md). Preserve these notices when distributing
+substantial portions of the upstream code or documentation.
