@@ -1,0 +1,100 @@
+.props {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Only the MDX table inside a component's Props panel owns this overflow. */
+.props :global(.typeset-scroll) {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.props :global(.typeset-scroll)::-webkit-scrollbar {
+  display: block;
+  height: 0.5rem;
+}
+
+.props :global(.typeset-scroll)::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+.props :global(table) {
+  width: max-content;
+  min-width: 64rem;
+  max-width: none;
+  table-layout: auto;
+  margin: 0;
+  border: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.props :global(th),
+.props :global(td) {
+  padding: 0.875rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  border-inline-end: 1px solid var(--border);
+}
+
+.props :global(th) {
+  background: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.props :global(tbody td) {
+  border-block-start: 1px solid var(--border);
+}
+
+.props :global(th:last-child),
+.props :global(td:last-child) {
+  border-inline-end: 0;
+}
+
+.props :global(th:nth-child(1)),
+.props :global(td:nth-child(1)) {
+  width: 10rem;
+  min-width: 10rem;
+}
+
+.props :global(th:nth-child(2)),
+.props :global(td:nth-child(2)) {
+  width: 24rem;
+  min-width: 24rem;
+}
+
+.props :global(th:nth-child(3)),
+.props :global(td:nth-child(3)) {
+  width: 9rem;
+  min-width: 9rem;
+  white-space: nowrap;
+}
+
+.props :global(th:nth-child(4)),
+.props :global(td:nth-child(4)) {
+  width: 20rem;
+  min-width: 20rem;
+  max-width: 20rem;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.props :global(td:nth-child(1)),
+.props :global(td:nth-child(2)),
+.props :global(td:nth-child(1) code),
+.props :global(td:nth-child(2) code) {
+  font-family: var(--font-mono), monospace;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}

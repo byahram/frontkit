@@ -1,3 +1,5 @@
+import { componentCatalog } from "@/registry/frontkit/components"
+
 export const guideNavigation = [
   { label: "Getting Started", href: "/guide/getting-started" },
   { label: "Coding Convention", href: "/guide/coding-convention" },
@@ -11,7 +13,10 @@ export const guideNavigation = [
 
 // Explicit publication list: existing template files remain directly addressable.
 export function isPublicContentUrl(url: string) {
-  return guideNavigation.some((item) => item.href === url)
+  return (
+    guideNavigation.some((item) => item.href === url) ||
+    componentCatalog.some((item) => `/${item.docRef}` === url)
+  )
 }
 
 export type NavigationItem = {
@@ -47,7 +52,10 @@ export const navigation: NavigationItem[] = [
     description:
       "실제 프로젝트에 재사용할 UI 컴포넌트와 구성 패턴을 정리합니다.",
     topics: ["Foundations", "Atoms", "Molecules", "Organisms"],
-    resources: [],
+    resources: componentCatalog.map((item) => ({
+      label: item.title,
+      href: `/${item.docRef}`,
+    })),
   },
   {
     label: "Interactions",

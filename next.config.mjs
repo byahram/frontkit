@@ -130,14 +130,14 @@ const nextConfig = {
         destination: "/components/base/toast.md",
         permanent: true,
       },
-      // Component redirects (default to base).
+      // Keep legacy short URLs, except the published FrontKit atoms.
       {
-        source: "/components/:name((?!radix|base|aria|form)[^/]+)",
+        source: "/components/:name((?!(?:button|input|badge|checkbox|radio-group)(?:\\.mdx?)?$|radix|base|aria|form)[^/]+)",
         destination: "/components/base/:name",
         permanent: false,
       },
       {
-        source: "/components/:name((?!radix|base|aria|form)[^/]+).md",
+        source: "/components/:name((?!(?:button|input|badge|checkbox|radio-group)(?:\\.mdx?)?$|radix|base|aria|form)[^/]+).md",
         destination: "/components/base/:name.md",
         permanent: false,
       },

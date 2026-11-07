@@ -1,0 +1,78 @@
+---
+title: Button
+description: 사용자의 동작과 페이지 이동을 명확하게 표현하는 버튼입니다.
+---
+
+## Playground
+
+Basic Props는 기존 구현의 실제 속성이고, Design Preset은 `className` 조합입니다. Interactions는 향후 별도로 제공합니다.
+설정을 바꾸거나 Preview를 조작하면 사용 예제와 Copy 내용도 갱신됩니다. Reset으로 기본 설정을 복원하세요.
+
+<ButtonPlayground />
+
+## Overview
+
+기존 new-york-v4의 Button과 데모를 재사용합니다. Code 탭에서 사용 예제와 실제 구현을 각각 복사할 수 있습니다.
+
+<ComponentReference slug="button">
+
+아래 Props는 현재 Registry 구현 기준으로 작성했습니다. 나머지는 기본 `button` 속성을 전달합니다.
+
+| Prop        | Type                                                                 | Default   | 설명                                          |
+| ----------- | -------------------------------------------------------------------- | --------- | --------------------------------------------- |
+| `variant`   | `default \| destructive \| outline \| secondary \| ghost \| link`    | `default` | 버튼의 시각적 역할                            |
+| `size`      | `default \| xs \| sm \| lg \| icon \| icon-xs \| icon-sm \| icon-lg` | `default` | 크기와 간격                                   |
+| `asChild`   | `boolean`                                                            | `false`   | Radix Slot으로 자식 요소에 동작과 스타일 전달 |
+| `disabled`  | `boolean`                                                            | 미지정    | 입력 비활성화                                 |
+| `type`      | `button \| submit \| reset`                                          | 미지정    | 폼 안에서는 의도에 맞게 명시                  |
+| `onClick`   | `React.MouseEventHandler<HTMLButtonElement>`                         | 미지정    | Client Component에서 처리할 클릭 이벤트       |
+| `className` | `string`                                                             | 미지정    | 추가 스타일                                   |
+
+</ComponentReference>
+
+### 사용 방법
+
+FrontKit 내부에서는 기존 Registry 경로를 사용합니다. 다른 프로젝트에서는 구현 파일을 배치한 경로로 import를 바꾸세요.
+
+```tsx
+import { Button } from "@/registry/new-york-v4/ui/button"
+
+export function SaveAction() {
+  return (
+    <Button type="button" variant="default">
+      저장
+    </Button>
+  )
+}
+```
+
+클릭 핸들러와 state가 필요하면 해당 예제를 Client Component에 둡니다.
+아이콘만 표시할 때는 `aria-label`을 제공하고, 이동은 `asChild`와 `next/link`를 조합합니다.
+
+## Basic Variants
+
+Default / Secondary / Outline / Ghost / Destructive / Link는 기존 shadcn/ui Button의 Variant입니다.
+아래 예제는 같은 Button을 그대로 사용하며 새로운 Variant나 Size를 추가하지 않습니다.
+
+<ButtonExamples group="basic" />
+
+## Design Variants
+
+Gradient Button, Pill Button, Glass Button, 3D Button은 기존 Button에 `className`을 적용한 디자인 예제입니다.
+각 영역의 Code 탭에서 해당 디자인의 전체 사용 예제를 복사할 수 있습니다.
+예제의 바깥 `div`는 미리보기 배치와 배경을 위한 코드이며, Glass 예제에는 효과를 확인할 수 있는 배경이 포함됩니다.
+복사 코드는 FrontKit의 기존 Button import 경로를 사용합니다. 다른 프로젝트에서는 해당 프로젝트의 Button 경로로 변경하세요.
+
+<ButtonExamples group="design" />
+
+## Related Interactions
+
+Ripple / Magnetic / Glow / Shimmer / Hover Scale / Arrow Slide / Loading은 향후 Interactions에서 제공할 예정입니다.
+현재는 관련 기능의 준비 상태를 안내하며 별도의 인터랙션이나 설정 패널은 제공하지 않습니다.
+위 Gradient의 Hover와 3D의 눌림 표현은 해당 디자인의 CSS 상태 스타일입니다.
+
+### 관련 가이드
+
+- [Coding Convention](/guide/coding-convention)
+- [TypeScript](/guide/typescript)
+- [Tailwind CSS](/guide/tailwind-css)

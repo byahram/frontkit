@@ -11,6 +11,13 @@ import { CodeCollapsibleWrapper } from "@/components/code-collapsible-wrapper"
 import { CodeTabs } from "@/components/code-tabs"
 import { ComponentPreview } from "@/components/component-preview"
 import { ComponentSource } from "@/components/component-source"
+import { ComponentReference } from "@/components/frontkit/component-reference"
+import { ButtonPlayground } from "@/components/frontkit/playground/button"
+import { InputPlayground } from "@/components/frontkit/playground/input"
+import { BadgePlayground } from "@/components/frontkit/playground/badge"
+import { CheckboxPlayground } from "@/components/frontkit/playground/checkbox"
+import { RadioGroupPlayground } from "@/components/frontkit/playground/radio-group"
+import { ButtonExamples } from "@/components/frontkit/button-examples"
 import { ComponentsList } from "@/components/components-list"
 import { CopyButton } from "@/components/copy-button"
 import { DirectoryList } from "@/components/directory-list"
@@ -119,6 +126,13 @@ function HeadingAnchor({
 }
 
 export const mdxComponents = {
+  ComponentReference,
+  ButtonExamples,
+  ButtonPlayground,
+  InputPlayground,
+  BadgePlayground,
+  CheckboxPlayground,
+  RadioGroupPlayground,
   h1: ({ children, id, ...props }: React.ComponentProps<"h1">) => {
     const headingId = id ?? getHeadingId(children)
 

@@ -1,0 +1,71 @@
+---
+title: Input
+description: 텍스트와 이메일 등 사용자 입력을 받는 기본 폼 컨트롤입니다.
+---
+
+## Playground
+
+Basic Props는 기존 구현의 실제 속성이고, Design Preset은 `className` 조합입니다. Interactions는 향후 별도로 제공합니다.
+설정을 바꾸거나 Preview를 조작하면 사용 예제와 Copy 내용도 갱신됩니다. Reset으로 기본 설정을 복원하세요.
+
+<InputPlayground />
+
+## Preview / Code / Props
+
+기존 new-york-v4의 Input과 이메일 입력 데모를 재사용합니다. 실제 입력 동작을 확인하고 Code 탭에서 예제와 구현을 구분해 확인하세요.
+
+<ComponentReference slug="input">
+
+기본 HTML input 속성을 전달합니다. `variant`나 별도의 크기 API는 현재 구현에 없습니다.
+
+| Prop                    | Type                                            | Default | 설명                             |
+| ----------------------- | ----------------------------------------------- | ------- | -------------------------------- |
+| `type`                  | `React.HTMLInputTypeAttribute`                  | 미지정  | 브라우저 기본값은 text           |
+| `id`                    | `string`                                        | 미지정  | label과 연결할 식별자            |
+| `placeholder`           | `string`                                        | 미지정  | 입력 예시; label을 대체하지 않음 |
+| `value`                 | `React.ComponentProps<"input">["value"]`        | 미지정  | 제어 입력 값                     |
+| `defaultValue`          | `React.ComponentProps<"input">["defaultValue"]` | 미지정  | 비제어 입력 초기 값              |
+| `onChange`              | `React.ChangeEventHandler<HTMLInputElement>`    | 미지정  | Client Component에서 입력 처리   |
+| `disabled` / `required` | `boolean`                                       | 미지정  | 비활성화 / 필수 입력             |
+| `aria-invalid`          | `boolean`                                       | 미지정  | 검증 오류 상태                   |
+| `className`             | `string`                                        | 미지정  | 추가 스타일                      |
+
+</ComponentReference>
+
+## 사용 방법
+
+```tsx
+import { Input } from "@/registry/new-york-v4/ui/input"
+
+export function EmailField() {
+  return (
+    <div className="space-y-2">
+      <label htmlFor="contact-email">이메일</label>
+      <Input
+        id="contact-email"
+        name="email"
+        type="email"
+        placeholder="name@example.com"
+        required
+      />
+    </div>
+  )
+}
+```
+
+`value`를 전달하는 제어 입력은 Client Component에서 `onChange`와 함께 관리하세요.
+정적인 폼은 `defaultValue`나 기본 HTML 폼 동작을 사용할 수 있습니다. 이 페이지는 Input 자체의 사용법이며 별도의 Form Field 컴포넌트를 만들지 않습니다.
+
+## Basic Variants / 상태 및 디자인
+
+기본 디자인은 기존 Input입니다. Playground의 basic / soft / underline을 선택해 기본 및 추가 스타일을 비교하세요. Disabled와 Read Only는 실제 input 속성이며 디자인 Variant가 아닙니다.
+
+## Related Interactions
+
+별도 동작 효과는 향후 Interactions에서 제공할 예정입니다. 이번 페이지에서는 기존 컴포넌트의 기본 상태와 스타일만 제공합니다.
+
+## 관련 가이드
+
+- [Coding Convention](/guide/coding-convention)
+- [TypeScript](/guide/typescript)
+- [Next.js](/guide/nextjs)

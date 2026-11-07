@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { mdxComponents } from "@/mdx-components"
@@ -14,6 +15,11 @@ import {
   isPublicContentUrl,
 } from "@/lib/navigation"
 import { SectionOverview } from "@/components/frontkit/section-overview"
+import {
+  ComponentGallery,
+  ComponentGalleryFallback,
+} from "@/components/frontkit/component-gallery"
+import { componentCatalog } from "@/registry/frontkit/components"
 import { DocsBaseSwitcher } from "@/components/docs-base-switcher"
 import { DocsCopyPage } from "@/components/docs-copy-page"
 import { DocsTableOfContents } from "@/components/docs-toc"
@@ -108,6 +114,17 @@ export default async function Page(props: {
 }) {
   const params = await props.params
   const section = getNavigationItem(params.slug)
+  if (section?.href === "/components") {
+    return (
+      <SectionOverview section={section}>
+        <Suspense
+          fallback={<ComponentGalleryFallback items={componentCatalog} />}
+        >
+          <ComponentGallery items={componentCatalog} />
+        </Suspense>
+      </SectionOverview>
+    )
+  }
   if (!params.slug?.length || section) {
     return <SectionOverview section={section} />
   }
@@ -120,12 +137,15 @@ export default async function Page(props: {
   const MDX = doc.body
   const isChangelog = params.slug?.[0] === "changelog"
   const isPublic = isPublicContentUrl(page.url)
+  const publicCategoryTree = {
+    ...publicSource.pageTree,
+    children: publicSource.pageTree.children.filter(
+      (item) => item.$id === params.slug?.[0]
+    ),
+  }
   const neighbours = isChangelog
     ? { previous: null, next: null }
-    : findNeighbour(
-        isPublic ? publicSource.pageTree : source.pageTree,
-        page.url
-      )
+    : findNeighbour(isPublic ? publicCategoryTree : source.pageTree, page.url)
   const raw = replaceComponentsList(await page.data.getText("raw"))
 
   return (

@@ -81,7 +81,7 @@ export function SectionOverview({
             </Card>
           ))}
         </div>
-      ) : (
+      ) : children ? null : (
         <div className="space-y-8">
           <div className="rounded-xl border bg-muted/20 p-6">
             <h2 className="mb-2 text-base font-medium">
@@ -133,7 +133,7 @@ export function SectionOverview({
         </div>
       )}
 
-      {children && <div className="typeset border-t pt-8">{children}</div>}
+      {children && <div>{children}</div>}
     </section>
   )
 }

@@ -1,0 +1,87 @@
+---
+title: Radio Group
+description: 여러 옵션 중 하나를 선택하는 라디오 그룹입니다.
+---
+
+## Playground
+
+기존 new-york-v4의 Radix Radio Group을 재사용합니다. Basic Props와 className 기반 Design Preset을 구분합니다.
+Options와 Label은 항목 조합을 위한 예제 설정이며 RadioGroup 자체의 Props가 아닙니다.
+
+<RadioGroupPlayground />
+
+## Preview / Code / Props
+
+기존 Registry 데모와 실제 구현을 각 Code 영역에서 확인하고 복사할 수 있습니다.
+아래 Props는 Radix 계열 기준이며 다른 UI 계열의 API와 혼용하지 않습니다.
+
+<ComponentReference slug="radio-group">
+
+Root는 `RadioGroup`, 항목은 `RadioGroupItem`으로 구성합니다. 아래 기본값은 Radix 기본 동작 기준입니다.
+
+| Prop                | Type                         | Default          | 설명                                             |
+| ------------------- | ---------------------------- | ---------------- | ------------------------------------------------ |
+| `value`             | `string`                     | 미지정           | Root의 제어 선택값                               |
+| `defaultValue`      | `string`                     | 미지정           | Root의 비제어 초기 선택값                        |
+| `onValueChange`     | `(value: string) => void`    | 미지정           | Root 선택 변경 처리                              |
+| `disabled`          | `boolean`                    | `false`          | Root 전체 또는 Item 개별 비활성화                |
+| `orientation`       | `"horizontal" \| "vertical"` | 미지정           | Root 키보드 이동 방향; 배치는 className으로 지정 |
+| `loop`              | `boolean`                    | `true`           | Root의 끝 항목에서 처음으로 키보드 이동          |
+| `name` / `required` | `string` / `boolean`         | 미지정 / `false` | Root의 폼 필드 이름과 필수 선택                  |
+| `value` (Item)      | `string`                     | 필수             | 각 항목의 고유 선택값                            |
+| `id` (Item)         | `string`                     | 미지정           | 외부 label과 연결할 식별자                       |
+| `className`         | `string`                     | 미지정           | Root 또는 Item의 추가 스타일                     |
+
+</ComponentReference>
+
+## Basic Variants / 사용 방법
+
+Radio Group은 별도의 `variant` Prop이 없습니다. 다음은 비제어 초기 선택을 사용하는 기본 예제입니다.
+
+```tsx
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@/registry/new-york-v4/ui/radio-group"
+
+export function PlanField() {
+  return (
+    <RadioGroup defaultValue="starter" name="plan" aria-label="요금제 선택">
+      <label className="flex items-center gap-3">
+        <RadioGroupItem value="starter" />
+        <span>Starter</span>
+      </label>
+      <label className="flex items-center gap-3">
+        <RadioGroupItem value="pro" />
+        <span>Pro</span>
+      </label>
+    </RadioGroup>
+  )
+}
+```
+
+FrontKit 밖에서는 UI import 경로를 변경하세요. 제어 모드에서는 `value`와 `onValueChange`를 함께 전달하고 사용하는 파일에 `"use client"`를 선언합니다.
+`defaultValue`는 비제어 초기값이므로 마운트 후 변경해도 현재 선택을 갱신하지 않습니다. `value`와 혼용하지 마세요.
+Playground는 현재 선택을 제어하며 Default Value를 초기·복원 기준으로 관리합니다. 변경하면 선택을 초기화하고 생성 코드의 복원 기준도 갱신합니다.
+
+## Design Variants
+
+Playground의 Design Preset에서 다음 디자인을 선택하고 해당 사용 예제를 복사할 수 있습니다.
+
+- **Default Radio** (`default`): 기존 원형 RadioGroupItem과 Label
+- **Card Radio** (`card`): 테두리와 선택 배경을 가진 카드 조합
+- **Segmented Radio** (`segmented`): 공통 배경 안에서 선택 영역을 강조하는 조합
+- **Button Style Radio** (`button`): 선택 시 채워지는 버튼 형태의 Label 조합
+
+모든 디자인은 동일한 RadioGroup / RadioGroupItem을 사용하며 키보드·선택 API를 유지합니다.
+Orientation은 키보드 방향과 flex 배치를 함께 변경합니다. 긴 항목과 가로 배치는 화면 너비에 맞춰 줄바꿈됩니다.
+
+## Related Interactions
+
+추가 인터랙션은 향후 Interactions에서 제공할 예정입니다. 별도 애니메이션이나 설정 엔진은 구현하지 않습니다.
+
+## 관련 가이드
+
+- [Coding Convention](/guide/coding-convention)
+- [TypeScript](/guide/typescript)
+- [Next.js](/guide/nextjs)

@@ -1,0 +1,66 @@
+---
+title: Checkbox
+description: 항목의 선택 여부와 동의 상태를 표현하는 체크박스입니다.
+---
+
+## Playground
+
+Basic Props는 기존 구현의 실제 속성이고, Design Preset은 `className` 조합입니다. Interactions는 향후 별도로 제공합니다.
+설정을 바꾸거나 Preview를 조작하면 사용 예제와 Copy 내용도 갱신됩니다. Reset으로 기본 설정을 복원하세요.
+
+<CheckboxPlayground />
+
+## Preview / Code / Props
+
+기존 new-york-v4의 Radix Checkbox와 텍스트 연결 데모를 재사용합니다.
+Live Preview에서 선택을 바꾸고, Code 탭에서 같은 데모 코드와 실제 구현을 확인할 수 있습니다.
+
+<ComponentReference slug="checkbox">
+
+Props는 현재 Radix 기반 구현 기준입니다. Base UI 계열의 API와 혼용하지 않습니다.
+
+| Prop              | Type                                            | Default           | 설명                           |
+| ----------------- | ----------------------------------------------- | ----------------- | ------------------------------ |
+| `checked`         | `boolean \| "indeterminate"`                    | 미지정            | 제어 선택 상태                 |
+| `defaultChecked`  | `boolean \| "indeterminate"`                    | 미지정            | 비제어 초기 상태               |
+| `onCheckedChange` | `(checked: boolean \| "indeterminate") => void` | 미지정            | Client Component에서 선택 처리 |
+| `disabled`        | `boolean`                                       | 미지정            | 입력 비활성화                  |
+| `required`        | `boolean`                                       | 미지정            | 필수 선택                      |
+| `id` / `name`     | `string`                                        | 미지정            | label 연결 / 폼 필드 이름      |
+| `value`           | `string \| number \| readonly string[]`         | Radix 기본값 `on` | 폼 제출 값                     |
+| `className`       | `string`                                        | 미지정            | 추가 스타일                    |
+
+</ComponentReference>
+
+## 사용 방법
+
+```tsx
+import { Checkbox } from "@/registry/new-york-v4/ui/checkbox"
+
+export function ConsentOption() {
+  return (
+    <div className="flex items-center gap-2">
+      <Checkbox id="consent" name="consent" required />
+      <label htmlFor="consent">개인정보 처리에 동의합니다</label>
+    </div>
+  )
+}
+```
+
+이 예제는 내부 상태를 사용하는 기존 Client Component를 Server Component에서 렌더링합니다.
+`checked`와 `onCheckedChange`로 상태를 직접 관리한다면 사용하는 파일에 `"use client"`를 선언하세요.
+label을 연결하고, checked의 indeterminate 상태를 단순한 `true` 값으로 취급하지 않습니다.
+
+## Basic Variants / 상태 및 디자인
+
+Playground에서 unchecked / checked / indeterminate 및 disabled 상태를 비교하세요. 별도의 디자인 Variant를 만들지 않고 기존 상태 API를 사용합니다.
+
+## Related Interactions
+
+별도 동작 효과는 향후 Interactions에서 제공할 예정입니다. 이번 페이지에서는 기존 컴포넌트의 기본 상태와 스타일만 제공합니다.
+
+## 관련 가이드
+
+- [Next.js](/guide/nextjs)
+- [TypeScript](/guide/typescript)
+- [Coding Convention](/guide/coding-convention)
