@@ -1,4 +1,4 @@
-import { source } from "@/lib/source"
+import { publicSource } from "@/lib/source"
 import { DocsSidebar } from "@/components/docs-sidebar"
 import { SidebarProvider } from "@/registry/new-york-v4/ui/sidebar"
 
@@ -17,7 +17,7 @@ export default function DocsLayout({
           } as React.CSSProperties
         }
       >
-        <DocsSidebar tree={source.pageTree} />
+        <DocsSidebar tree={publicSource.pageTree} />
         <div className="h-full min-w-0 w-full">{children}</div>
       </SidebarProvider>
     </div>

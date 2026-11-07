@@ -1,0 +1,84 @@
+---
+title: TypeScript
+description: strict 모드에서 Props, Union과 Utility Types를 사용하는 기본 권장안입니다.
+---
+
+## Overview
+
+**현재 사실:** `tsconfig.json`은 `strict: true`, `noEmit: true`,
+`moduleResolution: "bundler"`와 `@/*` 경로 별칭을 사용합니다.
+아래 Type / Interface 선택과 타입 작성 방식은 **권장안**이며 별도 강제 정책은 아닙니다.
+
+## Recommended Rules
+
+- Union, 함수 타입, 조합 타입은 `type`을 우선 고려합니다.
+- 명시적인 확장 계약이 필요한 객체에는 `interface`를 사용할 수 있습니다. 스타일 통일만을 위한 일괄 변환은 하지 않습니다.
+- Props는 필수와 선택 입력을 구분합니다. 선택 Props의 기본값은 사용하는 위치에서 정의합니다.
+- 가능한 상태는 문자열 Union으로 제한하고, 불가능한 조합은 구분된 Union으로 표현합니다.
+- 외부 응답은 `unknown`에서 검증합니다. `as`는 런타임 검증을 대신하지 않습니다.
+- `Pick`, `Omit`, `Partial`, `ComponentProps`로 기존 타입을 재사용합니다.
+
+## Examples
+
+### 기존 Button의 Props 재사용
+
+```tsx
+import type { ComponentProps } from "react"
+
+import { Button } from "@/registry/new-york-v4/ui/button"
+
+type ActionButtonProps = Pick<
+  ComponentProps<typeof Button>,
+  "children" | "disabled" | "onClick" | "variant"
+>
+```
+
+이벤트를 전달하는 예제는 Client Component 안에서 사용합니다.
+Props 타입만 재사용하려고 기존 UI와 같은 컴포넌트를 새로 만들 필요는 없습니다.
+
+### Union과 Utility Types
+
+```ts
+type GuideSummary = {
+  title: string
+  href: string
+  description: string
+}
+
+type GuideLink = Pick<GuideSummary, "title" | "href">
+type GuidePatch = Partial<Omit<GuideSummary, "href">>
+
+type LoadState =
+  | { status: "idle" }
+  | { status: "success"; guides: GuideSummary[] }
+  | { status: "error"; message: string }
+
+function getMessage(state: LoadState): string {
+  if (state.status === "error") return state.message
+  if (state.status === "success") return `${state.guides.length}개 문서`
+  return "문서를 선택하세요"
+}
+```
+
+### 외부 입력 좁히기
+
+```ts
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === "string")
+}
+```
+
+복잡한 구조 검증에는 이미 설치된 검증 도구를 검토하되, 단순한 타입 가드만으로 충분한 곳에 새 의존성을 추가하지 않습니다.
+
+## Common Mistakes / Notes
+
+- `any`나 `!`로 오류를 숨기기 전에 값이 없을 수 있는 이유를 확인합니다.
+- 타입 단언을 사용해 API 응답이 검증된 것처럼 취급하지 않습니다.
+- `Partial`은 모든 필드를 선택적으로 만듭니다. 업데이트할 수 없는 식별자를 함께 허용하지 않도록 주의합니다.
+- `skipLibCheck`는 외부 선언 파일 검사와 관련되며, 애플리케이션의 타입 안전성을 대체하지 않습니다.
+
+## Related Guides
+
+- [Coding Convention](/guide/coding-convention)
+- [Next.js](/guide/nextjs)
+- [Lint / Format](/guide/lint-format)

@@ -1,0 +1,75 @@
+---
+title: Lint / Format
+description: 현재 ESLint·Prettier 설정과 기존 오류를 구분하는 코드 품질 검사 절차입니다.
+---
+
+## Overview
+
+**현재 저장소에서 확인한 설정**입니다.
+
+| 항목       | 현재 상태                                                        |
+| ---------- | ---------------------------------------------------------------- |
+| ESLint     | Flat Config, `eslint-config-next/core-web-vitals`와 `typescript` |
+| 제외       | `.next/**`, `out/**`, `build/**`, `next-env.d.ts`                |
+| 명령       | `npm run lint` → `eslint`                                        |
+| TypeScript | `npm run typecheck` → `tsc --noEmit`                             |
+| Prettier   | 3.6.2 설치됨. 루트 전용 설정 파일과 format script는 미정의       |
+
+기존 템플릿에는 lint 오류가 남아 있습니다. 전체 검사의 실패를 이번 변경에서 발생한 오류와 구분하세요.
+
+## Recommended Rules
+
+아래는 **품질 관리와 포맷의 권장안**이며, CI나 자동 포맷 강제 설정으로 확정된 규칙은 아닙니다.
+
+1. 변경한 파일을 개별적으로 lint 검사합니다.
+2. TypeScript와 Production Build를 확인합니다.
+3. 전체 lint 결과는 변경 전과 비교해 신규 오류를 구분합니다.
+4. 변경 목적과 관계없는 기존 오류를 한꺼번에 수정하지 않습니다.
+5. 신규 가이드·코드는 double quote, semicolon 없음, ES5 trailing comma 설정을 권장합니다.
+
+## Examples
+
+### 전체 검사
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
+
+### 변경한 TypeScript 파일만 lint
+
+```bash
+./node_modules/.bin/eslint lib/navigation.ts lib/source.ts
+```
+
+현재 ESLint는 MDX 본문의 코드 예제를 타입 검사하지 않습니다. MDX는 빌드를 확인하고,
+예제 코드는 import 대상·API·실행 조건을 별도로 확인합니다.
+
+### Prettier 확인과 포맷
+
+전용 설정이 없어 아래 옵션을 명시하는 **운영 권장안**입니다.
+`format`이라는 npm script가 이미 존재한다는 의미는 아닙니다.
+
+```bash
+npx --no-install prettier --check --no-semi --trailing-comma es5 content/docs/guide
+```
+
+차이를 검토한 뒤 포맷이 필요할 때만 실행합니다.
+
+```bash
+npx --no-install prettier --write --no-semi --trailing-comma es5 content/docs/guide
+```
+
+## Common Mistakes / Notes
+
+- 전체에 `npm run lint -- --fix`부터 실행하지 않습니다. 관계없는 생성 코드까지 수정될 수 있습니다.
+- ESLint 성공이 타입 검사와 MDX 빌드의 성공을 의미하지는 않습니다.
+- `@ts-ignore`나 규칙 비활성화로 신규 오류를 숨기지 않습니다.
+- `tsconfig.json`의 검사 제외와 일부 생성 인덱스의 제약이 있으므로 typecheck 성공만으로 모든 데모의 실행을 보장하지 않습니다.
+
+## Related Guides
+
+- [Getting Started](/guide/getting-started)
+- [Coding Convention](/guide/coding-convention)
+- [Git](/guide/git)

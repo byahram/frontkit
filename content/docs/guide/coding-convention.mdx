@@ -1,0 +1,92 @@
+---
+title: Coding Convention
+description: 파일 이름, React 컴포넌트, Props, import와 Server/Client 경계의 기본 권장안입니다.
+---
+
+## Overview
+
+**현재 사실:** TypeScript `strict`가 활성화되어 있고 `@/*`는 저장소 루트를 가리킵니다.
+기존 UI와 파일명은 이미 존재합니다. 아래 네이밍·import 순서는 **권장안**이며,
+전체 저장소에 강제되는 공식 규칙이나 자동 정렬 설정으로 확정된 것은 아닙니다.
+
+## Recommended Rules
+
+| 대상            | 권장안                                                                           |
+| --------------- | -------------------------------------------------------------------------------- |
+| 파일·폴더       | `section-overview.tsx`, `use-mobile.ts`처럼 kebab-case                           |
+| 컴포넌트·타입   | `GuideLink`, `GuideLinkProps`처럼 PascalCase                                     |
+| 함수·변수·Props | `getGuide`, `isActive`처럼 camelCase                                             |
+| 일반 UI export  | named export 우선; `page.tsx`, `layout.tsx`는 Next.js 규약에 맞는 default export |
+| Props           | 공개 입력만 선언하고 임의의 `any` 대신 명확한 타입 사용                          |
+| import          | React → Next.js → 외부 패키지 → `@/lib`·Hooks → UI → 상대 경로 순서 제안         |
+
+Server Component를 기본으로 두고, state·이벤트·브라우저 API가 필요한 가장 작은 파일에만
+`"use client"`를 선언합니다. 기존 컴포넌트를 규칙에 맞추기 위해 일괄 이동하지 않습니다.
+
+## Examples
+
+### 기존 UI를 조합한 컴포넌트
+
+```tsx
+import Link from "next/link"
+
+import { cn } from "@/lib/utils"
+import { Button } from "@/registry/new-york-v4/ui/button"
+
+type GuideLinkProps = {
+  href: string
+  children: React.ReactNode
+  className?: string
+}
+
+export function GuideLink({ href, children, className }: GuideLinkProps) {
+  return (
+    <Button
+      asChild
+      variant="outline"
+      className={cn("justify-start", className)}
+    >
+      <Link href={href}>{children}</Link>
+    </Button>
+  )
+}
+```
+
+이 예제에는 브라우저 동작이 없으므로 `"use client"`를 추가하지 않습니다.
+
+### 상호작용이 필요한 작은 경계
+
+```tsx
+"use client"
+
+import { useState } from "react"
+
+import { Button } from "@/registry/new-york-v4/ui/button"
+
+export function ExampleToggle() {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <Button
+      aria-expanded={expanded}
+      onClick={() => setExpanded((value) => !value)}
+    >
+      {expanded ? "접기" : "펼치기"}
+    </Button>
+  )
+}
+```
+
+## Common Mistakes / Notes
+
+- 모듈을 가져오는 순서는 권장안입니다. 자동 정렬은 설정되어 있지 않습니다.
+- 파일 하나를 바꾸기 위해 기존 파일명을 일괄 변경하지 않습니다.
+- named export 권장은 Next.js 파일 규약을 대체하지 않습니다.
+- Server에서 Client로 넘기는 데이터는 직렬화 가능한 값으로 제한합니다. 일반 콜백 함수를 그대로 넘기지 않습니다.
+- 단순한 스타일 변경만으로 컴포넌트에 `"use client"`가 필요한 것은 아닙니다.
+
+## Related Guides
+
+- [TypeScript](/guide/typescript)
+- [Next.js](/guide/nextjs)
+- [Lint / Format](/guide/lint-format)

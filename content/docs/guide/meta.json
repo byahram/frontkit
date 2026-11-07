@@ -1,0 +1,13 @@
+{
+  "title": "Guide",
+  "pages": [
+    "getting-started",
+    "coding-convention",
+    "project-structure",
+    "git",
+    "typescript",
+    "nextjs",
+    "tailwind-css",
+    "lint-format"
+  ]
+}

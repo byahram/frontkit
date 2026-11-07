@@ -44,12 +44,14 @@ export function CommandMenu({
   colors,
   blocks,
   navItems,
+  showLegacySuggestions = true,
   ...props
 }: React.ComponentProps<typeof Dialog> & {
   tree: typeof source.pageTree
   colors: ColorPalette[]
   blocks?: { name: string; description: string; categories: string[] }[]
   navItems?: { href: string; label: string }[]
+  showLegacySuggestions?: boolean
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -461,12 +463,12 @@ export function CommandMenu({
               {query.isLoading ? "Searching..." : "No results found."}
             </CommandEmpty>
             {navItemsSection}
-            {stylesSection}
+            {showLegacySuggestions && stylesSection}
             {renderDelayedGroups ? (
               <>
                 {pageGroupsSection}
-                {colorGroupsSection}
-                {blocksSection}
+                {showLegacySuggestions && colorGroupsSection}
+                {showLegacySuggestions && blocksSection}
                 <SearchResults
                   setOpen={setOpen}
                   query={query}

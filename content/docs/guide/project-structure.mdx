@@ -1,0 +1,74 @@
+---
+title: Project Structure
+description: 현재 App Router 구조와 UI, 문서, Registry, 유틸리티의 파일 배치 기준입니다.
+---
+
+## Overview
+
+**현재 구조:** 루트의 `app`을 사용하는 App Router 프로젝트입니다.
+문서는 `app/(app)/(docs)/[[...slug]]/page.tsx`가 처리하며 실제 콘텐츠는 `content/docs`에 있습니다.
+새 폴더 트리를 만드는 대신 기존 역할을 확장합니다.
+
+## Recommended Rules
+
+아래 배치 기준은 **신규 코드에 적용할 권장안**입니다. 기존 파일을 이동하라는 의미가 아닙니다.
+
+| 위치           | 넣을 내용                               | 넣지 않을 내용                  |
+| -------------- | --------------------------------------- | ------------------------------- |
+| `app`          | URL 처리, Layout, 메타데이터, 화면 조합 | 여러 화면에서 쓰는 범용 UI 구현 |
+| `components`   | 실제 재사용 UI, 사이트 공통 UI          | 설명 문서 본문                  |
+| `content/docs` | MDX 설명·규칙·사용 예제                 | 실행용 상태 관리 로직           |
+| `registry`     | 기존 컴포넌트 소스·등록 정보            | 블로그 형태의 개발 기록         |
+| `lib`          | 공통 조회·변환·설정                     | React state를 사용하는 Hook     |
+| `hooks`        | 공통 React Hooks                        | 문서 본문·라우팅                |
+| `examples`     | 데모와 실행 가능한 사용 예제            | 프로젝트 전체 설정의 복제       |
+
+Atomic Design은 분류 기준으로 사용하고, 기존 Button을 `atoms/`에 복제하거나 이동하지 않습니다.
+페이지 전용 로직은 해당 기능 가까이에 두고, 실제로 공유될 때 공통 영역으로 분리합니다.
+
+## Examples
+
+### 현재 라우팅 구조
+
+```text
+app/
+├─ layout.tsx
+├─ (app)/
+│  ├─ layout.tsx
+│  └─ (docs)/
+│     ├─ layout.tsx
+│     └─ [[...slug]]/page.tsx
+├─ (view)/
+│  ├─ examples/[base]/[name]/page.tsx
+│  └─ preview/[base]/[name]/page.tsx
+└─ api/search/route.ts
+
+content/docs/guide/getting-started.mdx
+```
+
+`(app)`, `(docs)`, `(view)`는 Route Group이므로 URL에 포함되지 않습니다.
+위 MDX 문서는 Fumadocs의 `/` base URL 아래 `/guide/getting-started`로 연결됩니다.
+
+### 새 Guide 문서 배치
+
+```text
+content/docs/guide/       문서 본문과 meta.json 순서
+lib/navigation.ts        공개 Guide 목록·메뉴
+lib/source.ts            전체 문서와 공개 문서 source
+```
+
+`meta.json`은 Guide 순서를 정의하고, 공개 대상은 `lib/navigation.ts`에서 명시합니다.
+파일만 추가한다고 기존 템플릿 문서가 공개 검색에 자동 포함되지는 않습니다.
+
+## Common Mistakes / Notes
+
+- Route Group 이름이 달라도 결과 URL이 같으면 충돌할 수 있습니다.
+- 현재 루트는 optional catch-all이 처리합니다. 별도 `app/page.tsx`를 무작정 추가하지 않습니다.
+- `registry/__index__.tsx`, `registry/**/__components__`, `styles/`는 생성 결과입니다. 수동 편집 대신 생성 입력과 빌드 절차를 확인합니다.
+- Registry와 Preview 소스는 공개 목록에서 숨겨져도 기존 URL과 기능을 위해 유지합니다.
+
+## Related Guides
+
+- [Getting Started](/guide/getting-started)
+- [Next.js](/guide/nextjs)
+- [Coding Convention](/guide/coding-convention)

@@ -1,3 +1,19 @@
+export const guideNavigation = [
+  { label: "Getting Started", href: "/guide/getting-started" },
+  { label: "Coding Convention", href: "/guide/coding-convention" },
+  { label: "Project Structure", href: "/guide/project-structure" },
+  { label: "Git", href: "/guide/git" },
+  { label: "TypeScript", href: "/guide/typescript" },
+  { label: "Next.js", href: "/guide/nextjs" },
+  { label: "Tailwind CSS", href: "/guide/tailwind-css" },
+  { label: "Lint / Format", href: "/guide/lint-format" },
+]
+
+// Explicit publication list: existing template files remain directly addressable.
+export function isPublicContentUrl(url: string) {
+  return guideNavigation.some((item) => item.href === url)
+}
+
 export type NavigationItem = {
   label: string
   href: string
@@ -23,24 +39,15 @@ export const navigation: NavigationItem[] = [
       "Tailwind CSS",
       "Lint / Format",
     ],
-    resources: [
-      { label: "기존 설치 문서", href: "/installation" },
-      { label: "테마 설정", href: "/theming" },
-      { label: "프로젝트 구성", href: "/components-json" },
-    ],
+    resources: guideNavigation,
   },
   {
     label: "Components",
     href: "/components",
     description:
-      "기존 shadcn/ui를 바탕으로 프로젝트에 재사용할 UI를 찾아보세요.",
+      "실제 프로젝트에 재사용할 UI 컴포넌트와 구성 패턴을 정리합니다.",
     topics: ["Foundations", "Atoms", "Molecules", "Organisms"],
-    resources: [
-      { label: "Button", href: "/components/base/button" },
-      { label: "Input", href: "/components/base/input" },
-      { label: "Sidebar", href: "/components/base/sidebar" },
-      { label: "Data Table", href: "/components/base/data-table" },
-    ],
+    resources: [],
   },
   {
     label: "Interactions",

@@ -1,0 +1,90 @@
+---
+title: Next.js
+description: 현재 App Router의 라우팅, Layout, Server/Client 경계와 데이터·메타데이터 작성 기준입니다.
+---
+
+## Overview
+
+**현재 사실:** FrontKit은 Next.js 16.4.4의 App Router를 사용합니다.
+문서 진입점은 정적 생성과 `generateStaticParams`, `dynamicParams = false`를 사용합니다.
+`params`는 Promise로 전달받아 `await`하며, Fumadocs가 MDX와 페이지 URL을 연결합니다.
+
+이 버전의 API는 기존 예제와 다를 수 있습니다. 구현 전 설치된
+`node_modules/next/dist/docs/`에서 해당 기능의 문서를 확인하세요.
+
+## Recommended Rules
+
+- `layout.tsx`에는 공통 틀을, `page.tsx`에는 페이지 진입과 데이터 조합을 둡니다.
+- Server Component를 기본으로 하고 state·이벤트·브라우저 API가 필요한 경계만 Client로 만듭니다.
+- 내부 이동은 기존 `next/link`를 사용합니다.
+- 데이터의 최신성 요구에 따라 캐시 정책을 명시합니다. `fetch`가 자동으로 영구 캐시된다고 가정하지 않습니다.
+- 정적인 설명은 `metadata`, 경로별 정보는 `generateMetadata`로 제공합니다.
+- 새 문서는 공개 목록과 정적 경로에 포함되는지 함께 확인합니다.
+
+## Examples
+
+### 현재 문서 데이터 읽기
+
+아래는 기존 source를 이용하는 Server Component 예제입니다. 새로운 API나 데이터베이스가 필요하지 않습니다.
+
+```tsx
+import Link from "next/link"
+
+import { publicSource } from "@/lib/source"
+
+export function GuideLinks() {
+  return (
+    <ul>
+      {publicSource.getPages().map((page) => (
+        <li key={page.url}>
+          <Link href={page.url}>{page.data.title}</Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+```
+
+### 비동기 params와 메타데이터
+
+다음은 동적 세그먼트의 **작성 패턴**입니다. 현재 catch-all 파일을 이 코드로 교체하지 않습니다.
+
+```tsx
+import type { Metadata } from "next"
+
+type Props = { params: Promise<{ slug: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  return { title: slug }
+}
+```
+
+### 외부 데이터를 읽는 경우
+
+```ts
+import "server-only"
+
+export async function readReference(url: URL): Promise<string> {
+  const response = await fetch(url, { next: { revalidate: 3600 } })
+  if (!response.ok) throw new Error(`Request failed: ${response.status}`)
+  return response.text()
+}
+```
+
+이 예제는 시간 기반 재검증을 선택한 경우입니다. 매 요청의 최신 데이터가 필요하다면
+`cache: "no-store"` 같은 정책을 검토하되, 현재 `force-static` 문서 페이지에
+요청별 동작을 섞지 말고 해당 라우트의 정적·동적 요구부터 확인합니다.
+
+## Common Mistakes / Notes
+
+- 최상위 Layout을 통째로 Client Component로 바꾸지 않습니다.
+- `window`·`localStorage`는 서버 렌더링 중 직접 접근하지 않습니다. Client에서도 초기 렌더는 서버에서 실행될 수 있습니다.
+- 모든 Server Component의 데이터가 매 요청마다 갱신되는 것은 아닙니다. 라우트의 정적 생성과 캐시 설정을 함께 확인합니다.
+- Route Group은 URL에 포함되지 않습니다. 기존 `/docs/...` 리다이렉트와 Preview 경로를 유지합니다.
+
+## Related Guides
+
+- [Project Structure](/guide/project-structure)
+- [Coding Convention](/guide/coding-convention)
+- [TypeScript](/guide/typescript)

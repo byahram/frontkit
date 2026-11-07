@@ -1,8 +1,7 @@
 import Link from "next/link"
 
-import { getColors } from "@/lib/colors"
 import { siteConfig } from "@/lib/config"
-import { source } from "@/lib/source"
+import { publicSource } from "@/lib/source"
 import { CommandMenu } from "@/components/command-menu"
 import { GitHubLink } from "@/components/github-link"
 import { MainNav } from "@/components/main-nav"
@@ -11,8 +10,7 @@ import { ModeSwitcher } from "@/components/mode-switcher"
 import { Separator } from "@/registry/new-york-v4/ui/separator"
 
 export function SiteHeader() {
-  const colors = getColors()
-  const pageTree = source.pageTree
+  const pageTree = publicSource.pageTree
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background">
@@ -35,7 +33,8 @@ export function SiteHeader() {
             <div className="w-24 md:w-auto">
               <CommandMenu
                 tree={pageTree}
-                colors={colors}
+                colors={[]}
+                showLegacySuggestions={false}
                 navItems={siteConfig.navItems}
               />
             </div>

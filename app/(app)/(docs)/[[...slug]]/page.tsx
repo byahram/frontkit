@@ -5,10 +5,14 @@ import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react"
 import { findNeighbour } from "fumadocs-core/page-tree"
 
 import { replaceComponentsList } from "@/lib/llm"
-import { source } from "@/lib/source"
+import { source, publicSource } from "@/lib/source"
 import { absoluteUrl } from "@/lib/utils"
 import { siteConfig } from "@/lib/config"
-import { getNavigationItem, navigation } from "@/lib/navigation"
+import {
+  getNavigationItem,
+  navigation,
+  isPublicContentUrl,
+} from "@/lib/navigation"
 import { SectionOverview } from "@/components/frontkit/section-overview"
 import { DocsBaseSwitcher } from "@/components/docs-base-switcher"
 import { DocsCopyPage } from "@/components/docs-copy-page"
@@ -65,6 +69,9 @@ export async function generateMetadata(props: {
   return {
     title: doc.title,
     description: doc.description,
+    robots: isPublicContentUrl(page.url)
+      ? undefined
+      : { index: false, follow: false },
     alternates: {
       canonical: page.url,
     },
@@ -102,17 +109,7 @@ export default async function Page(props: {
   const params = await props.params
   const section = getNavigationItem(params.slug)
   if (!params.slug?.length || section) {
-    // Keep the existing component index and its links below the FrontKit overview.
-    const componentIndex =
-      section?.href === "/components"
-        ? source.getPage(["components"])
-        : undefined
-    const ComponentIndex = componentIndex?.data.body
-    return (
-      <SectionOverview section={section}>
-        {ComponentIndex && <ComponentIndex components={mdxComponents} />}
-      </SectionOverview>
-    )
+    return <SectionOverview section={section} />
   }
   const page = source.getPage(params.slug)
   if (!page) {
@@ -122,9 +119,13 @@ export default async function Page(props: {
   const doc = page.data
   const MDX = doc.body
   const isChangelog = params.slug?.[0] === "changelog"
+  const isPublic = isPublicContentUrl(page.url)
   const neighbours = isChangelog
     ? { previous: null, next: null }
-    : findNeighbour(source.pageTree, page.url)
+    : findNeighbour(
+        isPublic ? publicSource.pageTree : source.pageTree,
+        page.url
+      )
   const raw = replaceComponentsList(await page.data.getText("raw"))
 
   return (
@@ -237,7 +238,7 @@ export default async function Page(props: {
           </div>
         ) : null}
         <div className="hidden flex-1 flex-col gap-6 px-6 xl:flex">
-          <OpenInV0Cta />
+          {!isPublic && <OpenInV0Cta />}
         </div>
       </div>
     </div>

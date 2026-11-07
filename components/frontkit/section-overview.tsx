@@ -91,40 +91,43 @@ export function SectionOverview({
             </h2>
             <p className="text-sm leading-6 text-muted-foreground">
               {section.label === "Guide" &&
-                "FrontKit 개발 가이드를 준비하고 있습니다. 프로젝트를 시작하려면 기존 설치 및 테마 문서를 참고하세요."}
+                "프로젝트 실행부터 코드 작성과 검증까지, 실제 개발에 참고할 기본 가이드입니다. 현재 설정과 권장안을 구분해서 확인하세요."}
               {section.label === "Components" &&
-                "기존 컴포넌트와 사용 예제를 확인하세요. 목적에 맞는 UI를 쉽게 찾을 수 있도록 분류를 정리하고 있습니다."}
+                "프로젝트에 재사용할 UI 컴포넌트와 구성 패턴을 준비하고 있습니다."}
               {section.label === "Interactions" &&
                 "움직임을 직접 확인하고 코드를 재사용할 수 있는 인터랙션 레퍼런스를 준비하고 있습니다."}
               {section.status === "planned" &&
                 "Guide, Components, Interactions를 바탕으로 프로젝트를 시작할 수 있는 템플릿을 준비하고 있습니다."}
             </p>
           </div>
-          <ul
-            className="flex flex-wrap gap-2"
-            aria-label={`${section.label} 예정 카테고리`}
-          >
-            {section.topics.map((topic) => (
-              <li key={topic}>
-                <Badge variant="secondary">{topic}</Badge>
-              </li>
-            ))}
-          </ul>
+          {section.href !== "/guide" && (
+            <ul
+              className="flex flex-wrap gap-2"
+              aria-label={`${section.label} 예정 카테고리`}
+            >
+              {section.topics.map((topic) => (
+                <li key={topic}>
+                  <Badge variant="secondary">{topic}</Badge>
+                </li>
+              ))}
+            </ul>
+          )}
           {section.resources.length > 0 && (
             <div className="space-y-4">
-              <h2 className="text-lg font-medium">기존 레퍼런스 살펴보기</h2>
-              <ul className="flex flex-wrap gap-3">
+              <h2 className="text-lg font-medium">Guide 문서</h2>
+              <ol className="divide-y rounded-xl border">
                 {section.resources.map((resource) => (
                   <li key={resource.href}>
-                    <Button asChild variant="outline" size="sm">
-                      <Link href={resource.href}>
-                        {resource.label}
-                        <ArrowUpRight />
-                      </Link>
-                    </Button>
+                    <Link
+                      href={resource.href}
+                      className="flex items-center justify-between gap-4 rounded-sm px-5 py-4 font-medium transition-colors hover:bg-muted/50 focus-visible:outline-2 focus-visible:outline-ring"
+                    >
+                      {resource.label}
+                      <ArrowUpRight />
+                    </Link>
                   </li>
                 ))}
-              </ul>
+              </ol>
             </div>
           )}
         </div>

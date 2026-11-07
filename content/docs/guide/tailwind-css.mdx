@@ -1,0 +1,89 @@
+---
+title: Tailwind CSS
+description: Tailwind CSS v4의 유틸리티, 반응형 클래스, 디자인 토큰과 다크 모드 사용법입니다.
+---
+
+## Overview
+
+**현재 사실:** Tailwind CSS 4.3.0을 사용하며 `app/globals.css`에
+`@import "tailwindcss"`, `@theme inline`, `:root`, `.dark` 토큰이 정의되어 있습니다.
+PostCSS는 `@tailwindcss/postcss`를 사용합니다. 별도의 v3 방식 설정 파일을 새로 만들 필요가 없습니다.
+
+## Recommended Rules
+
+아래는 신규 UI 작성에 대한 **권장안**입니다.
+
+- `bg-background`, `text-foreground`, `border-border` 같은 의미 기반 토큰을 우선 사용합니다.
+- 기본 스타일은 작은 화면 기준으로 작성하고 `sm:`, `md:`, `lg:`로 확장합니다.
+- spacing·radius·shadow는 기존 유틸리티와 토큰을 재사용합니다.
+- 조건부 클래스는 기존 `cn()`을 사용합니다. 동적 문자열 조립 대신 완전한 클래스 문자열을 선택합니다.
+- 클래스 순서의 강제 정렬은 현재 설정에 없습니다. 배치 → 간격 → 타이포그래피 → 색상 → 상태 순서는 읽기 위한 제안입니다.
+
+## Examples
+
+### 반응형·토큰·cn 조합
+
+```tsx
+import { cn } from "@/lib/utils"
+
+type ReferencePanelProps = {
+  children: React.ReactNode
+  compact?: boolean
+}
+
+export function ReferencePanel({
+  children,
+  compact = false,
+}: ReferencePanelProps) {
+  return (
+    <section
+      className={cn(
+        "rounded-xl border border-border bg-card text-card-foreground shadow-sm",
+        compact ? "p-4" : "p-4 sm:p-6 lg:p-8"
+      )}
+    >
+      {children}
+    </section>
+  )
+}
+```
+
+`cn()`은 `lib/utils.ts`에서 기존 `cn` 패키지를 재수출합니다. 비슷한 유틸리티를 새로 만들지 않습니다.
+
+### v4 토큰 연결 이해하기
+
+아래는 **현재 설정의 일부를 단순화한 설명용 예제**입니다. 그대로 추가해 토큰을 중복 선언하지 않습니다.
+
+```css
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0% 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+}
+```
+
+기존 ThemeProvider가 `html`의 클래스를 전환하면 의미 기반 토큰을 사용하는 UI도 함께 변경됩니다.
+
+## Common Mistakes / Notes
+
+- 기존 토큰으로 충분한 곳에 화면별 고정 색상이나 별도 테마를 추가하지 않습니다.
+- `bg-${color}-500`처럼 완전한 클래스 이름이 소스에 없는 형태를 피합니다.
+- `dark:`는 상태별 차이에 사용하고, 배경과 글자색은 공통 토큰을 우선 사용합니다.
+- `registry/styles`의 입력과 `styles/`의 생성 결과를 혼동하지 않습니다.
+
+## Related Guides
+
+- [Coding Convention](/guide/coding-convention)
+- [Project Structure](/guide/project-structure)
+- [Lint / Format](/guide/lint-format)

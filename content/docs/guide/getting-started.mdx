@@ -1,0 +1,80 @@
+---
+title: Getting Started
+description: FrontKit의 기술 스택, 실행 방법과 프로젝트 개발을 시작하는 순서입니다.
+---
+
+## Overview
+
+FrontKit은 ARKD3X가 운영하는 프론트엔드 개발 레퍼런스와 재사용 가능한 UI Kit입니다.
+개인 학습 기록보다 프로젝트에서 다시 사용할 수 있는 개발 기준과 실행 가능한 예제를 정리합니다.
+
+**현재 저장소에서 확인한 구성**입니다. 버전 변경 시 `package.json`과 잠금 파일을 기준으로 확인하세요.
+
+| 영역        | 구성                                                 |
+| ----------- | ---------------------------------------------------- |
+| 앱          | Next.js 16.4.4 App Router, React 19.3.0              |
+| 언어·스타일 | TypeScript strict 모드, Tailwind CSS 4.3.0           |
+| UI          | 기존 shadcn/ui, Base UI / Radix UI / React Aria 구현 |
+| 문서        | Fumadocs + MDX, Shiki 코드 하이라이팅                |
+| 테마        | next-themes, 라이트·다크·시스템 테마                 |
+
+## Recommended Rules
+
+다음 순서는 **개발 시작 권장안**입니다. 새로운 기능을 만들기 전에 기존 구현을 확인하세요.
+
+1. 프로젝트를 실행하고 Guide에서 폴더 역할을 확인합니다.
+2. 기존 컴포넌트와 유틸리티로 요구사항을 충족할 수 있는지 확인합니다.
+3. 페이지와 문서는 Server Component를 우선 사용합니다.
+4. 작은 변경 단위로 구현하고, 변경 파일 검사와 타입·빌드를 확인합니다.
+
+## Examples
+
+### 저장소 실행
+
+새 작업 폴더에서 아래 명령을 실행합니다. 이미 clone한 폴더에서는 `npm ci`부터 실행하세요.
+
+```bash
+git clone https://github.com/arkd3x/frontkit.git
+cd frontkit
+npm ci
+npm run dev
+```
+
+`http://localhost:3000/guide`에서 시작합니다. `npm ci`는 `.npmrc`의 peer dependency 설정을
+사용하며, 기존 `postinstall` 스크립트가 MDX 인덱스를 생성합니다.
+
+### 주요 폴더
+
+```text
+app/             페이지, Layout, Route Handler
+components/      사이트 공통 UI와 FrontKit 전용 조합 UI
+content/docs/    MDX 문서; guide/는 FrontKit Guide
+registry/        기존 UI 소스와 Registry 정보
+examples/        실행 가능한 사용 예제
+styles/          Registry에서 생성한 스타일별 UI
+lib/             공통 조회·변환·설정
+hooks/           공통 React Hooks
+```
+
+### 기본 검사
+
+```bash
+npm run typecheck
+npm run build
+```
+
+Lint의 기존 오류와 변경 파일 확인 방법은 [Lint / Format](/guide/lint-format)을 참고하세요.
+
+## Common Mistakes / Notes
+
+- 실행을 위해 Next.js 앱이나 shadcn/ui를 다시 설치하지 않습니다.
+- `styles/`와 Registry 생성 인덱스를 직접 편집하지 않습니다.
+- `NEXT_PUBLIC_SITE_URL`은 사이트 원점 URL입니다. 로컬 기본값은 `http://localhost:3000`입니다.
+- 기존 템플릿 소스는 보존되어 있지만, 공개 목록과 검색은 FrontKit이 지정한 문서만 표시합니다.
+- Guide는 제공되며 Components·Interactions·Templates는 후속 개발 대상입니다.
+
+## Related Guides
+
+- [Project Structure](/guide/project-structure)
+- [Coding Convention](/guide/coding-convention)
+- [Lint / Format](/guide/lint-format)
