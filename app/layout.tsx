@@ -23,18 +23,25 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL(siteConfig.url),
   description: siteConfig.description,
-  keywords: ["Next.js", "React", "Tailwind CSS", "Components", "shadcn"],
-  creator: "Frontkit",
+  keywords: [
+    "FrontKit",
+    "ARKD3X",
+    "Next.js",
+    "React",
+    "Tailwind CSS",
+    "UI Kit",
+  ],
+  creator: siteConfig.brand,
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "ko_KR",
     url: siteConfig.url,
     title: siteConfig.name,
     description: siteConfig.description,
     siteName: siteConfig.name,
     images: [
       {
-        url: `${siteConfig.url}/opengraph-image.png`,
+        url: new URL(siteConfig.ogImage, siteConfig.url).toString(),
         width: 1200,
         height: 630,
         alt: siteConfig.name,
@@ -45,7 +52,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [`${siteConfig.url}/opengraph-image.png`],
+    images: [new URL(siteConfig.ogImage, siteConfig.url).toString()],
   },
   icons: {
     icon: "/favicon.ico",
@@ -67,7 +74,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ko"
       suppressHydrationWarning
       className={cn(
         fontVariables,

@@ -7,6 +7,9 @@ import { findNeighbour } from "fumadocs-core/page-tree"
 import { replaceComponentsList } from "@/lib/llm"
 import { source } from "@/lib/source"
 import { absoluteUrl } from "@/lib/utils"
+import { siteConfig } from "@/lib/config"
+import { getNavigationItem, navigation } from "@/lib/navigation"
+import { SectionOverview } from "@/components/frontkit/section-overview"
 import { DocsBaseSwitcher } from "@/components/docs-base-switcher"
 import { DocsCopyPage } from "@/components/docs-copy-page"
 import { DocsTableOfContents } from "@/components/docs-toc"
@@ -18,13 +21,35 @@ export const dynamic = "force-static"
 export const dynamicParams = false
 
 export function generateStaticParams() {
-  return source.generateParams()
+  const params = [
+    ...source.generateParams(),
+    { slug: [] as string[] },
+    ...navigation.map((item) => ({ slug: item.href.slice(1).split("/") })),
+  ]
+  return Array.from(
+    new Map(
+      params.map((param) => [(param.slug ?? []).join("/"), param])
+    ).values()
+  )
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ slug: string[] }>
+  params: Promise<{ slug?: string[] }>
 }) {
   const params = await props.params
+  const section = getNavigationItem(params.slug)
+  if (!params.slug?.length || section) {
+    const title = section?.label ?? siteConfig.name
+    const description = section?.description ?? siteConfig.description
+    const url = absoluteUrl(section?.href ?? "/")
+    return {
+      title: section ? title : { absolute: title },
+      description,
+      alternates: { canonical: url },
+      openGraph: { title, description, url },
+      twitter: { title, description },
+    }
+  }
   const page = source.getPage(params.slug)
 
   if (!page) {
@@ -67,15 +92,28 @@ export async function generateMetadata(props: {
           )}&description=${encodeURIComponent(doc.description)}`,
         },
       ],
-      creator: "@shadcn",
     },
   }
 }
 
 export default async function Page(props: {
-  params: Promise<{ slug: string[] }>
+  params: Promise<{ slug?: string[] }>
 }) {
   const params = await props.params
+  const section = getNavigationItem(params.slug)
+  if (!params.slug?.length || section) {
+    // Keep the existing component index and its links below the FrontKit overview.
+    const componentIndex =
+      section?.href === "/components"
+        ? source.getPage(["components"])
+        : undefined
+    const ComponentIndex = componentIndex?.data.body
+    return (
+      <SectionOverview section={section}>
+        {ComponentIndex && <ComponentIndex components={mdxComponents} />}
+      </SectionOverview>
+    )
+  }
   const page = source.getPage(params.slug)
   if (!page) {
     notFound()
@@ -96,7 +134,7 @@ export default async function Page(props: {
     >
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="h-(--top-spacing) shrink-0" />
-        <div className="mx-auto flex w-full max-w-160 min-w-0 flex-1 flex-col gap-6 px-4 py-6 text-foreground md:px-0 lg:py-8 dark:text-foreground">
+        <div className="mx-auto flex w-full max-w-184 min-w-0 flex-1 flex-col gap-6 px-4 py-8 text-foreground sm:px-6 lg:px-10 lg:py-10 dark:text-foreground">
           <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between md:items-start">

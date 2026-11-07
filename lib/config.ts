@@ -1,18 +1,18 @@
+import { navigation } from "@/lib/navigation"
+
 export const siteConfig = {
-  name: "Frontkit",
+  name: "FrontKit",
+  brand: "ARKD3X",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-  ogImage: "https://ui.shadcn.com/og.jpg",
+  ogImage:
+    "/og?title=FrontKit&description=Frontend%20reference%20and%20UI%20Kit%20by%20ARKD3X",
   description:
-    "Composable, accessible components with thoughtful defaults. Build your own component library with code you can customize, extend, and make your own.",
+    "ARKD3X가 운영하는 프론트엔드 개발 레퍼런스와 재사용 가능한 UI Kit입니다.",
   links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn-ui/ui",
+    github: "https://github.com/arkd3x/frontkit",
+    upstream: "https://github.com/shadcn-ui/ui",
   },
-  navItems: [
-    { href: "/", label: "Docs" },
-    { href: "/components", label: "Components" },
-    { href: "/directory", label: "Directory" },
-  ],
+  navItems: navigation,
 }
 
 export const META_THEME_COLORS = {

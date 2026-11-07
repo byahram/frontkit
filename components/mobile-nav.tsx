@@ -2,8 +2,10 @@
 
 import * as React from "react"
 import Link, { type LinkProps } from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { cn } from "cn"
+
+import { isNavigationItemActive, type NavigationItem } from "@/lib/navigation"
 
 import { PAGES_NEW } from "@/lib/docs"
 import { showMcpDocs } from "@/lib/flags"
@@ -16,61 +18,13 @@ import {
   PopoverTrigger,
 } from "@/registry/new-york-v4/ui/popover"
 
-const TOP_LEVEL_SECTIONS = [
-  { name: "Introduction", href: "/" },
-  {
-    name: "Components",
-    href: "/components",
-  },
-  {
-    name: "AI Elements",
-    href: "/ai-elements",
-  },
-  {
-    name: "Installation",
-    href: "/installation",
-  },
-  {
-    name: "Theming",
-    href: "/theming",
-  },
-  {
-    name: "CLI",
-    href: "/cli",
-  },
-  {
-    name: "RTL",
-    href: "/rtl",
-  },
-  {
-    name: "Skills",
-    href: "/skills",
-  },
-  {
-    name: "MCP Server",
-    href: "/mcp",
-  },
-  {
-    name: "Registry",
-    href: "/registry",
-  },
-  {
-    name: "Forms",
-    href: "/forms",
-  },
-  {
-    name: "Changelog",
-    href: "/changelog",
-  },
-]
-
 export function MobileNav({
   tree,
   items,
   className,
 }: {
   tree: typeof source.pageTree
-  items: { href: string; label: string }[]
+  items: readonly NavigationItem[]
   className?: string
 }) {
   const [open, setOpen] = React.useState(false)
@@ -104,9 +58,6 @@ export function MobileNav({
             </div>
             <span className="sr-only">Toggle Menu</span>
           </div>
-          <span className="flex h-8 items-center text-lg leading-none font-medium">
-            Menu
-          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -119,37 +70,29 @@ export function MobileNav({
         <div className="flex flex-col gap-12 overflow-auto px-6 py-6">
           <div className="flex flex-col gap-4">
             <div className="text-sm font-medium text-muted-foreground">
-              Menu
+              FrontKit
             </div>
             <div className="flex flex-col gap-3">
-              {items.map((item, index) => (
-                <MobileLink key={index} href={item.href} onOpenChange={setOpen}>
+              {items.map((item) => (
+                <MobileLink
+                  key={item.href}
+                  href={item.href}
+                  onOpenChange={setOpen}
+                  className="aria-[current=location]:underline aria-[current=location]:underline-offset-4"
+                  aria-current={
+                    isNavigationItemActive(pathname, item.href)
+                      ? "location"
+                      : undefined
+                  }
+                >
                   {item.label}
+                  {item.status === "planned" && (
+                    <span className="text-xs font-normal text-muted-foreground">
+                      준비 중
+                    </span>
+                  )}
                 </MobileLink>
               ))}
-            </div>
-          </div>
-          <div className="flex flex-col gap-4">
-            <div className="text-sm font-medium text-muted-foreground">
-              Sections
-            </div>
-            <div className="flex flex-col gap-3">
-              {TOP_LEVEL_SECTIONS.map(({ name, href }) => {
-                if (!showMcpDocs && href.includes("/mcp")) {
-                  return null
-                }
-                return (
-                  <MobileLink key={name} href={href} onOpenChange={setOpen}>
-                    {name}
-                    {PAGES_NEW.includes(href) && (
-                      <span
-                        className="flex size-2 rounded-full bg-blue-500"
-                        title="New"
-                      />
-                    )}
-                  </MobileLink>
-                )
-              })}
             </div>
           </div>
           <div className="flex flex-col gap-8">
@@ -203,12 +146,10 @@ function MobileLink({
   children: React.ReactNode
   className?: string
 }) {
-  const router = useRouter()
   return (
     <Link
       href={href}
       onClick={() => {
-        router.push(href.toString())
         onOpenChange?.(false)
       }}
       className={cn("flex items-center gap-2 text-2xl font-medium", className)}

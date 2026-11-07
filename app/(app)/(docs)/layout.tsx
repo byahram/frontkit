@@ -18,7 +18,7 @@ export default function DocsLayout({
         }
       >
         <DocsSidebar tree={source.pageTree} />
-        <div className="h-full w-full">{children}</div>
+        <div className="h-full min-w-0 w-full">{children}</div>
       </SidebarProvider>
     </div>
   )
