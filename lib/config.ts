@@ -9,7 +9,7 @@ export const siteConfig = {
   description:
     "ARKD3X가 운영하는 프론트엔드 개발 레퍼런스와 재사용 가능한 UI Kit입니다.",
   links: {
-    github: "https://github.com/arkd3x/frontkit",
+    github: "https://github.com/byahram/frontkit",
     upstream: "https://github.com/shadcn-ui/ui",
   },
   navItems: navigation,
